@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>
+<br>
+<h2 style="margin-left: 10%">Start an Observation Session</h2>
+<br>
+<br>
+<form method="POST" action="/" class="row g-3" style="margin-left: 10%; margin-right: 10%;">
+    <label for="inputPassword2" class="visually-hidden">Team Name</label>
+    <input type="text" name="team_name" class="form-control" id="inputPassword2" placeholder="Team Name" required pattern="[0-9\.]+">
+    <button type="submit" class="btn btn-primary mb-3">Start Session</button>
+</form>
+{% endblock %}

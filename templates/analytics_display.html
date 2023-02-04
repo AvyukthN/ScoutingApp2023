@@ -1,0 +1,322 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="margin-left: 10%; margin-right: 10%">
+    <br>
+    <br>
+    <h2>Data Analytics for Scouted Teams</h2>
+    <hr>
+    <br>
+    <br>
+    <!-- div for all charts and graphs and whatnot -->
+    <div>
+        <h2>Leaderboard</h2>
+        <br>
+        <h4 id="rank-by"></h4>
+        <div style="margin-right: 20%;">
+            <table class="table table-primary table-striped table-hover">
+                <thead>
+                    <tr>
+                    <th scope="col">Team</th>
+                    <th onclick="sortColumn('avg_high'); changeColRank(this);" scope="col">Average High Points</th>
+                    <th onclick="sortColumn('sd_high'); changeColRank(this);" scope="col">σ High Goal</th>
+                    <th onclick="sortColumn('avg_low'); changeColRank(this);" scope="col">Average Low Points</th>
+                    <th onclick="sortColumn('sd_low'); changeColRank(this);" scope="col">σ Low Goal</th>
+                    <th onclick="sortColumn('avg_climb'); changeColRank(this);" scope="col">Average Climb Points</th>
+                    <th onclick="sortColumn('sd_climb'); changeColRank(this);" scope="col">σ Climb</th>
+                    <th onclick="sortColumn('med'); changeColRank(this)" scope="col">Median Points</th>
+                    <th onclick="sortColumn('sum'); changeColRank(this)" scope="col">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody id="tableData"></tbody>
+            </table>
+        </div>
+        <script>
+            let sortDirection = false;
+            let teamData = [];
+
+            var sd_highs = {{ sd_high | safe }};
+            var sd_lows = {{ sd_low | safe }};
+            var sd_climbs = {{ sd_climb | safe }};
+            var avg_highs = {{ high_avg_data | safe }};
+            var avg_lows = {{ low_avg_data | safe }};
+            var avg_climbs = {{ climb_avg_data | safe }};
+            var medians = {{ med_data | safe }};
+            var sums = {{ sum_data | safe }};
+
+            for (let i = 0; i < sd_highs.length; i++){
+                teamData.push({
+                    name: sd_highs[i][0],
+                    sd_high: sd_highs[i][1],
+                    sd_low: sd_lows[i][1],
+                    sd_climb: sd_climbs[i][1],
+                    avg_high: avg_highs[i][1],
+                    avg_low: avg_lows[i][1],
+                    avg_climb: avg_climbs[i][1],
+                    med: medians[i][1],
+                    sum: sums[i][1]
+                });
+            }
+                        
+            loadTableData(teamData);
+
+            function loadTableData(tableData){
+                const tableBody = document.getElementById('tableData');
+                let dataHtml = '';
+
+                for (let data of teamData){
+                    dataHtml += `
+                        <tr>
+                        <th scope="row">${data.name}</th>
+                        <th scope="row">${data.avg_high.toPrecision(3)}</th>
+                        <th scope="row">${data.sd_high.toPrecision(3)}</th>
+                        <th scope="row">${data.avg_low.toPrecision(3)}</th>
+                        <th scope="row">${data.sd_low.toPrecision(3)}</th>
+                        <th scope="row">${data.avg_climb.toPrecision(3)}</th>
+                        <th scope="row">${data.sd_climb.toPrecision(3)}</th>
+                        <th scope="row">${data.med.toPrecision(3)}</th>
+                        <th scope="row">${data.sum}</th>
+                        </tr>`;
+                }
+
+                tableBody.innerHTML = dataHtml;
+            }
+
+            function sortColumn(columnName){
+                const dataType = teamData[0][columnName];
+
+                sortDirection = !sortDirection;
+
+                // switch(dataType){
+                //     case 'number':
+                //     break;
+                // }
+                sortNumColumn(sortDirection, columnName)
+
+                loadTableData(teamData);
+            }
+
+            function sortNumColumn(sort, columnName) {
+                teamData = teamData.sort((p1, p2) => {
+                    return sort ? p1[columnName] - p2[columnName] : p2[columnName] - p1[columnName]
+                });
+            }
+            
+            function changeColRank(element) {
+                var colName = element.innerText;
+
+                if (sortDirection){
+                    var order = 'Ascending';
+                } else {
+                    var order = 'Descending';
+                }
+
+                document.getElementById('rank-by').innerText = 'ranking: ' + colName + ' - ' + order;
+            }
+        </script>
+        <br>
+        <h2>Point Summary</h2>
+        <canvas id="bar_chart" width="770" height="400"></canvas>
+        <script>
+            var vec = {{ radar_data | safe }};
+
+            var bar_data = [];
+            var teams = [];
+            // for (let i = 0; i < vec.length; i++){
+            //     teams.push(vec[i][0])
+            // }
+            for (let i = 0; i < vec.length; i++){
+                teams.push(vec[i][0])
+                total_points = vec[i][1][0][0] + vec[i][1][0][1] + vec[i][1][0][2]
+                bar_data.push(total_points)
+            }
+
+            var context = document.getElementById("bar_chart").getContext("2d");
+            var lineChart = new Chart(context, {
+                type: "bar",
+                data: {
+                    labels: teams,
+                    datasets:[{
+                        label: "Calculated Score",
+                        data: bar_data,
+                        fill: false,
+                        backgroundColor: "rgb(50, 92, 168)",
+                        borderColor: "rgb(50, 92, 168)",
+                        lineTension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: false
+                }
+            });
+        </script>
+        <br>
+        <br>
+        <h2 style="margin-left: 0%">ALL TEAMS</h2>
+        <hr style="margin-left: 0%; margin-right: 0%;">
+        <br>
+        <br>
+        <div>
+            {%for i in range(0, len)%}
+            <h2>Team {{ final_data[i][0] }}</h2>
+            <canvas id="{{ final_data[i][0] }}" width="770" height="400"></canvas>
+            <br>
+            <br>
+            <h4>Stat Summary</h4>
+            <br>
+            <div style="margin-right: 50%;">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                        <th scope="col">Rows</th>
+                        <th scope="col">Average Points</th>
+                        <th scope="col">Median Points</th>
+                        <th scope="col">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td id = "avg_points{{ final_data[i][0] }}"></td>
+                            <td id = "med_points{{ final_data[i][0] }}"></td>
+                            <td id = "total_points{{ final_data[i][0] }}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4>Consistency Table</h4>
+            <br>
+            <div style="margin-right: 50%;">
+                <table class="table table-dark table-striped">
+                    <thead>
+                        <tr>
+                        <th scope="col">Rows</th>
+                        <th scope="col">σ High Goals</th>
+                        <th scope="col">σ Low Goals</th>
+                        <th scope="col">σ Climb</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td id = "sd_high{{ final_data[i][0] }}"></td>
+                            <td id = "sd_low{{ final_data[i][0] }}"></td>
+                            <td id = "sd_climb{{ final_data[i][0] }}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <script>
+                function update(){
+                    var vec = {{ final_data[i] | safe }};
+
+                    var data = vec[1];
+                    var name = vec[0];
+
+                    var sd_highs = {{ sd_high[i] | safe }};
+                    var sd_lows = {{ sd_low[i] | safe }};
+                    var sd_climbs = {{ sd_climb[i] | safe }};
+                    var meds = {{ med_data[i] | safe }};
+                    var sums = {{ sum_data[i] | safe }};
+
+                    var sd_high = sd_highs[1];
+                    var sd_low = sd_lows[1];
+                    var sd_climb = sd_climbs[1];
+                    var med = meds[1];
+                    var sum = sums[1];
+
+                    data.sort();
+
+                    var total = 0;
+                    for (let i = 0; i < data.length; i++){
+                        total += data[i];
+                    }
+
+                    if (data.length % 2 == 0){
+                        med_p1 = (data.length/2) - 1;
+                        med_p2 = med_p1 + 1;
+
+                        med_point = (data[med_p1] + data[med_p2]) / 2;
+                    } else {
+                        med_point = data[(((data.length) - 1) / 2) + 1];
+                    }
+
+                    document.getElementById("avg_points" + name).innerText = (total/data.length).toPrecision(3); 
+                    document.getElementById("med_points" + name).innerText = med.toPrecision(3);
+                    document.getElementById("total_points" + name).innerText = sum; 
+
+                    document.getElementById("sd_high" + name).innerText = sd_high.toPrecision(3); 
+                    document.getElementById("sd_low" + name).innerText = sd_low.toPrecision(3); 
+                    document.getElementById("sd_climb" + name).innerText = sd_climb.toPrecision(3); 
+                }
+                update();
+            </script>
+            <br>
+            <br>
+            {%endfor%}
+            <script>
+                var vals = {{ final_data | safe }};
+                var highs = {{ high_goals_data | safe }};
+                var lows = {{ low_goals_data | safe }};
+                var climbs = {{ climb_data | safe }};
+
+                for (let i = 0; i < vals.length; i++){
+                    var y = vals[i][1];
+                    var high = highs[i][1];
+                    var low = lows[i][1];
+                    var climb = climbs[i][1];
+                    var x = [];
+
+                    for (let i = 0; i < y.length; i++){
+                        x.push(i+1);
+                    }
+                    
+                    // giving "2d context" where it can draw within the canvas
+                    var context = document.getElementById(vals[i][0]).getContext("2d");
+                    var lineChart = new Chart(context, {
+                        type: "line",
+                        data: {
+                            labels: x,
+                            datasets: [
+                                {
+                                    label: "Calculated Total Score",
+                                    data: y,
+                                    fill: false,
+                                    borderColor: "rgb(50, 92, 168)",
+                                    lineTension: 0.1
+                                },
+                                {
+                                    label: "High Goal",
+                                    data: high,
+                                    fill: false,
+                                    borderColor: "rgb(100, 0, 168)",
+                                    lineTension: 0.1
+                                },
+                                {
+                                    label: "Low Goal",
+                                    data: low,
+                                    fill: false,
+                                    borderColor: "rgb(255, 202, 0)",
+                                    lineTension: 0.1
+                                },
+                                {
+                                    label: "Climb",
+                                    data: climb, 
+                                    fill: false,
+                                    borderColor: "rgb(255, 150, 0)",
+                                    lineTension: 0.1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: false
+                        }
+                    });
+
+                }
+            </script>
+        </div>
+    </div>
+    <br>
+</div>
+{% endblock %}

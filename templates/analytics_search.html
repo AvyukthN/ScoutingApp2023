@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="margin-left: 10%; margin-right: 10%;">
+<br>
+<br>
+<h2 style="margin-left: 0%">Search For Team Data</h2>
+<br>
+<br>
+<div>
+    <form method="POST" action="/analytics_search" class="row g-3" style="margin-left: 0%; margin-right: 0%;">
+        <label for="inputPassword2" class="visually-hidden"></label>
+        <input type="text" name="team_name" class="form-control" id="inputPassword2" placeholder="Team Name" required pattern="[0-9\.]+">
+        <button type="submit" class="btn btn-primary mb-3">Search</button>
+    </form>
+</div>
+<br>
+<br>
+<h2>Team {{ final_data[idx][0] }}</h2>
+<canvas id="searched" width="770" height="400"></canvas>
+<br>
+<br>
+<table class="table table-primary table-striped table-hover">
+    <thead>
+        <tr>
+        <th scope="col">Team</th>
+        <th onclick="" scope="col">Average High Points</th>
+        <th onclick="" scope="col">Average Low Points</th>
+        <th onclick="" scope="col">Average Climb Points</th>
+        <th onclick="" scope="col">Climb Level</th>
+        </tr>
+    </thead>
+    <tbody id="tableData"></tbody>
+</table>
+<script>
+    var vals = {{ final_data | safe }};
+    var highs = {{ high_goals_data | safe }};
+    var lows = {{ low_goals_data | safe }};
+    var climbs = {{ climb_data | safe }};
+    var idx = {{ idx | safe }};
+    var x = [];
+
+    for (let i = 0; i < vals[idx][1].length; i++){
+        x.push(i+1);
+    }
+
+    var context = document.getElementById('searched').getContext("2d");
+    var lineChart = new Chart(context, {
+        type: "line",
+        data: {
+            labels: x,
+            datasets: [
+                {
+                    label: "Calculated Total Score",
+                    data: vals[idx][1],
+                    fill: false,
+                    borderColor: "rgb(50, 92, 168)",
+                    lineTension: 0.1
+                },
+                {
+                    label: "High Goal",
+                    data: highs[idx][1],
+                    fill: false,
+                    borderColor: "rgb(100, 0, 168)",
+                    lineTension: 0.1
+                },
+                {
+                    label: "Low Goal",
+                    data: lows[idx][1],
+                    fill: false,
+                    borderColor: "rgb(255, 202, 0)",
+                    lineTension: 0.1
+                },
+                {
+                    label: "Climb",
+                    data: climbs[idx][1], 
+                    fill: false,
+                    borderColor: "rgb(255, 150, 0)",
+                    lineTension: 0.1
+                }
+            ]
+        },
+        options: {
+            responsive: false
+        }
+    });
+
+    var name = {{ team_name | safe }};
+    var high = {{ high_avg | safe }};
+    var low = {{ low_avg | safe }};
+    var climb = {{ climb_avg | safe }};
+    var level = {{ climb_level | safe }};
+
+    console.log('climb level');
+    console.log(level);
+
+    var c_l = "NONE"
+
+    if (level == 0){
+        c_l = "NONE";
+    }
+    if (level == 1){
+        c_l = "LOW";
+    }
+    if (level == 2){
+        c_l = "MID";
+    }
+    if (level == 3){
+        c_l = "HIGH";
+    }
+    if (level == 4){
+        c_l = "TRAVERSAL";
+    }
+
+    console.log(c_l);
+
+    function loadTableData(){
+        const tableBody = document.getElementById('tableData');
+        
+        dataHtml = `
+            <tr>
+            <th scope="row">${name}</th>
+            <th scope="row">${high}</th>
+            <th scope="row">${low}</th>
+            <th scope="row">${climb}</th>
+            <th scope="row">${c_l}</th>
+            </tr>`;
+
+        tableBody.innerHTML = dataHtml;
+    }
+
+    loadTableData();
+</script>
+</div>
+{% endblock %}
