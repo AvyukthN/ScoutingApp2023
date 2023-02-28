@@ -306,6 +306,8 @@ def observation():
 		
 		now_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S-%f')
 
+		print(request.json)
+
 		data = {
 			'time': now_time,
 			'team_name': name,
@@ -316,6 +318,7 @@ def observation():
 			'mid_pts': request.json['mid_pts'],
 			'low_pts': request.json['low_pts'],
 			'climb': request.json['climb'],
+			'match_number': request.json['match_number'],
 			'notes': request.json['notes']
 		}
 
@@ -326,6 +329,7 @@ def observation():
 			'mid_pts': request.json['mid_pts'],
 			'low_pts': request.json['low_pts'],
 			'climb': request.json['climb'],
+			'match_number': request.json['match_number'],
 			'notes': request.json['notes']
 		}
 
