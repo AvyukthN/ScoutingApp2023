@@ -243,10 +243,10 @@
 	</div>
 	<br>
 	<h2 style="margin-left: 10%;">Robot Didnt Move</h2>
-	<button style = "margin-left: 10%" type="submit" onclick="robot_move(this.id)" id="didnt_move" class="btn btn-primary">Docked</button> <a>(robot on platform)</a>	<br>
+	<button style = "margin-left: 10%" type="submit" onclick="robot_move(this.id)" id="didnt_move" class="btn btn-primary">Didnt Move</button> <a>(robot on platform)</a>	<br>
 	<br>
 	<h2 style="margin-left: 10%;">Defense Robot</h2>
-	<button style = "margin-left: 10%" type="submit" onclick="defense_bot(this.id)" id="didnt_move" class="btn btn-primary">Docked</button> <a>(robot on platform)</a>	<br>
+	<button style = "margin-left: 10%" type="submit" onclick="defense_bot(this.id)" id="defense_bot" class="btn btn-primary">Defense Bot</button> <a>(robot on platform)</a>	<br>
 	<br>
     <h2 style="margin-left: 10%; margin-top: 3%;">Notes</h2>
 	<br>
@@ -267,8 +267,10 @@
 </div>
 <!-- JavaScript code-->
 <script>
-	var climb = false;
-	var climb_auto = false;
+	var docked = false;
+	var docked_auto = false;
+	var engaged = false;
+	var engaged_auto = false;
 	var defensive = false;
 	var no_move = false;
 	
@@ -306,11 +308,18 @@
 	
 	function toggle_climb(id){	
 		const id_length = id.length;
-		if (id_length > 7){
-			climb_auto = !(climb_auto);
+		if (id_length > 7 && id_length.includes("dock")){
+			docked_auto = !(docked_auto);
 		}
-		else {
-			climb = !(climb);
+		else if (id length > 7 && id_length.includes("engag")){
+			engaged_auto = !(engaged_auto);
+		)}
+
+		if (!(id_length > 7) && id_length.includes("dock")){
+			docked = !(docked);
+		}
+		else if (!(id_length > 7) && id_length.includes("engag")){
+			engaged = !(engaged);
 		}
 
 		const elem = document.getElementById(id);
@@ -434,8 +443,10 @@
 			"high_pts": high_pts,
 			"mid_pts": mid_pts,
 			"low_pts": low_pts,
-			"climb": climb,
-			"climb_auto": climb_auto,
+			"docked": docked,
+			"docked_auto": climb_auto,
+			"engaged": engaged,
+			"engaged_auto": engaged_auto,
 			"defense_bot": defensive,
 			"no_move": no_move
 		};
