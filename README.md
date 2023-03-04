@@ -1,4 +1,4 @@
-# ScoutingApp2022
+# ScoutingApp2023
 
 This is  the scouting app that will be used to keep track of other teams' performance at competitions.
 
@@ -23,7 +23,7 @@ Extract the contents of the ZIP file and put them in a location that is easy for
 
 ![Alt text](assets/extract_folder_gif.gif?raw=true "Demonstrating how to extract the ZIP")
 
-Open the folder titled `ScoutingApp2022-main` and then click the address bar containing the file path (click on the empty right side of the address bar, where there is just whitespace and no text), so that it highlights the path in blue. Then type `cmd` and press enter. This action is demonstrated below. A black terminal window should appear with white text in which the bottom line has the file path that you just clicked on.
+Open the folder titled `ScoutingApp2023-main` and then click the address bar containing the file path (click on the empty right side of the address bar, where there is just whitespace and no text), so that it highlights the path in blue. Then type `cmd` and press enter. This action is demonstrated below. A black terminal window should appear with white text in which the bottom line has the file path that you just clicked on.
 
 ![Alt text](assets/open_cmd_gif.gif?raw=true "Demonstrating how to open cmd")
 
