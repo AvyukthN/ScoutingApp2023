@@ -306,8 +306,6 @@ def observation():
 		
 		now_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S-%f')
 
-		print(request.json)
-
 		data = {
 			'time': now_time,
 			'team_name': name,
@@ -320,7 +318,6 @@ def observation():
 			'high_pts': request.json['high_pts'],
 			'mid_pts': request.json['mid_pts'],
 			'low_pts': request.json['low_pts'],
-			'climb': request.json['climb'],
 			'match_number': request.json['match_number'],
 			'notes': request.json['notes']
 		}
@@ -361,6 +358,9 @@ def observation():
 		high_auto_pts = np.sum(np.array(list(map(int, data['high_col_auto']))))
 		mid_auto_pts = np.sum(np.array(list(map(int, data['mid_col_auto']))))
 		low_auto_pts = np.sum(np.array(list(map(int, data['low_col_auto']))))
+
+		print("HIGHIWEPOIWJEPFOIWEJF")
+		print(high_pts)
 
 		csv_data = {
 			'time': now_time,
