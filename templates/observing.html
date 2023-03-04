@@ -113,10 +113,10 @@
 			<img onclick="change_img(this.id);" id="0-8-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Square_gray.svg/1200px-Square_gray.svg.png" width="40" height="50" alt="buttonpng" border="0" />
 		</button>
 		<button type="submit">
-			<img onclick="change_img(this.id);" id="1-8" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Square_gray.svg/1200px-Square_gray.svg.png" width="40" height="50" alt="buttonpng" border="0" />
+			<img onclick="change_img(this.id);" id="1-8-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Square_gray.svg/1200px-Square_gray.svg.png" width="40" height="50" alt="buttonpng" border="0" />
 		</button>
 		<button type="submit">
-			<img onclick="change_img(this.id);" id="2-8" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Square_gray.svg/1200px-Square_gray.svg.png" width="40" height="50" alt="buttonpng" border="0" />
+			<img onclick="change_img(this.id);" id="2-8-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Square_gray.svg/1200px-Square_gray.svg.png" width="40" height="50" alt="buttonpng" border="0" />
 		</button>
 	</div>
 	<br>
@@ -302,6 +302,7 @@
 			}
 		}
 		if (src_link == gray_square_link){
+			console.log(id);
 			if (cube_binded.includes(id.slice(0, 3))){
 				elem.src = box_link;
 			}
