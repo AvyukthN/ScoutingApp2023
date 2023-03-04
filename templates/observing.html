@@ -120,6 +120,14 @@
 		</button>
 	</div>
 	<br>
+	<h2 style="margin-left: 10%;">Charging Station AUTO (the thing the robots go on top at the end)</h2>
+	<br>
+	<div style="margin-left: 10%;">
+		<button type="submit" onclick="toggle_climb(this.id)" id="docked-auto" class="btn btn-primary">Docked</button> <a>(robot on platform)</a>	<br>
+		<br>
+		<button type="submit" onclick="toggle_climb(this.id)" id="engaged-auto" class="btn btn-primary">Engaged</button> <a>(platform is balanced)</a>
+	</div>
+	<br>
 	<h2 style="margin-left: 10%;">Teleop</h2>
 	<br>
 	<div style="margin-left: 10%">
@@ -225,6 +233,7 @@
 	</div>
 	<br>
 	<br>
+	<br>
 	<h2 style="margin-left: 10%;">Charging Station (the thing the robots go on top at the end)</h2>
 	<br>
 	<div style="margin-left: 10%;">
@@ -233,6 +242,11 @@
 		<button type="submit" onclick="toggle_climb(this.id)" id="engaged" class="btn btn-primary">Engaged</button> <a>(platform is balanced)</a>
 	</div>
 	<br>
+	<h2 style="margin-left: 10%;">Robot Didnt Move</h2>
+	<button style = "margin-left: 10%" type="submit" onclick="robot_move(this.id)" id="didnt_move" class="btn btn-primary">Docked</button> <a>(robot on platform)</a>	<br>
+	<br>
+	<h2 style="margin-left: 10%;">Defense Robot</h2>
+	<button style = "margin-left: 10%" type="submit" onclick="defense_bot(this.id)" id="didnt_move" class="btn btn-primary">Docked</button> <a>(robot on platform)</a>	<br>
 	<br>
     <h2 style="margin-left: 10%; margin-top: 3%;">Notes</h2>
 	<br>
@@ -254,9 +268,26 @@
 <!-- JavaScript code-->
 <script>
 	var climb = false;
+	var climb_auto = false;
+	var defensive = false;
+	var no_move = false;
 	
-	function toggle_climb(id){
-		climb = !(climb);
+	function robot_move(id){
+		no_move = !(no_move);
+	}
+
+	function defense_bot(id){
+		defensive = !(defensive);
+	}
+	
+	function toggle_climb(id){	
+		const id_length = id.length;
+		if (id_length > 7){
+			climb_auto = !(climb_auto);
+		}
+		else {
+			climb = !(climb);
+		}
 
 		const elem = document.getElementById(id);
 		const class_t = elem.className;
@@ -379,7 +410,10 @@
 			"high_pts": high_pts,
 			"mid_pts": mid_pts,
 			"low_pts": low_pts,
-			"climb": climb
+			"climb": climb,
+			"climb_auto": climb_auto,
+			"defense_bot": defensive,
+			"no_move": no_move
 		};
 
 		console.log(team_data);

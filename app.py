@@ -325,19 +325,6 @@ def observation():
 			'notes': request.json['notes']
 		}
 
-		csv_data = {
-			'time': now_time,
-			'team_name': name,
-			'high_pts': request.json['high_pts'],
-			'mid_pts': request.json['mid_pts'],
-			'low_pts': request.json['low_pts'],
-			'high_pts_auto': request.json['high_pts_auto'],
-			'mid_pts_auto': request.json['mid_pts_auto'],
-			'low_pts_auto': request.json['low_pts_auto'],
-			'climb': request.json['climb'],
-			'match_number': request.json['match_number'],
-			'notes': request.json['notes']
-		}
 
 		def sum_arr(arr: list) -> int:
 			total = 0
@@ -368,11 +355,40 @@ def observation():
 		mid_link_auto_pts = get_link_pts(data['mid_col_auto'])
 		low_link_auto_pts = get_link_pts(data['low_col_auto'])
 
+		high_pts = np.sum(np.array(data['high_col']))
+		mid_pts = np.sum(np.array(data['mid_col']))
+		low_pts = np.sum(np.array(data['low_col']))
+		high_auto_pts = np.sum(np.array(data['high_col_auto']))
+		mid_auto_pts = np.sum(np.array(data['mid_col_auto']))
+		low_auto_pts = np.sum(np.array(data['low_col_auto']))
+
+		csv_data = {
+			'time': now_time,
+			'team_name': name,
+			'high': high_pts,
+			'high-auto': high_auto_pts,
+			'mid': mid_pts,
+			'mid-auto': mid_auto_pts,
+			'low': low_pts,
+			'low-auto': low_auto_pts,
+			'high_link_pts': high_link_pts,
+			'mid_link_pts': mid_link_pts,
+			'low_link_pts': low_link_pts,
+			'high_link_pts_auto': high_link_auto_pts,
+			'mid_link_pts_auto': mid_link_auto_pts,
+			'low_link_pts_auto': low_link_auto_pts,
+			'climb': request.json['climb'],
+			'match_number': request.json['match_number'],	
+			'defense_bot': request.json['defense_bot'],
+			'no_move': request.json['no_move'],
+			'notes': request.json['notes']
+		}
+
 		data['high_link_pts'] = high_link_pts
 		data['mid_link_pts'] = mid_link_pts
 		data['low_link_pts'] = low_link_pts
 		data['high_link_auto_pts'] = high_link_auto_pts
-		data['mid_link__auto_pts'] = mid_link_auto_pts
+		data['mid_link_auto_pts'] = mid_link_auto_pts
 		data['low_link_auto_pts'] = low_link_auto_pts
 		
 		csv_data['high_link_pts'] = high_link_pts
