@@ -274,10 +274,34 @@
 	
 	function robot_move(id){
 		no_move = !(no_move);
+
+		const elem = document.getElementById(id);
+		const class_t = elem.className;
+
+		console.log(class_t);
+		
+		if (class_t == 'btn btn-primary'){
+			elem.className = 'btn btn-secondary';
+		}
+		if (class_t == 'btn btn-secondary'){
+			elem.className = 'btn btn-primary';
+		}
 	}
 
 	function defense_bot(id){
 		defensive = !(defensive);
+
+		const elem = document.getElementById(id);
+		const class_t = elem.className;
+
+		console.log(class_t);
+		
+		if (class_t == 'btn btn-primary'){
+			elem.className = 'btn btn-secondary';
+		}
+		if (class_t == 'btn btn-secondary'){
+			elem.className = 'btn btn-primary';
+		}
 	}
 	
 	function toggle_climb(id){	

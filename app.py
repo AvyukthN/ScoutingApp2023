@@ -355,12 +355,12 @@ def observation():
 		mid_link_auto_pts = get_link_pts(data['mid_col_auto'])
 		low_link_auto_pts = get_link_pts(data['low_col_auto'])
 
-		high_pts = np.sum(np.array(map(int, data['high_col'])))
-		mid_pts = np.sum(np.array(map(int, data['mid_col'])))
-		low_pts = np.sum(np.array(map(int, data['low_col'])))
-		high_auto_pts = np.sum(np.array(map(int, data['high_col_auto'])))
-		mid_auto_pts = np.sum(np.array(map(int, data['mid_col_auto'])))
-		low_auto_pts = np.sum(np.array(map(int, data['low_col_auto'])))
+		high_pts = np.sum(np.array(list(map(int, data['high_col']))))
+		mid_pts = np.sum(np.array(list(map(int, data['mid_col']))))
+		low_pts = np.sum(np.array(list(map(int, data['low_col']))))
+		high_auto_pts = np.sum(np.array(list(map(int, data['high_col_auto']))))
+		mid_auto_pts = np.sum(np.array(list(map(int, data['mid_col_auto']))))
+		low_auto_pts = np.sum(np.array(list(map(int, data['low_col_auto']))))
 
 		csv_data = {
 			'time': now_time,
