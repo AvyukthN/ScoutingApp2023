@@ -123,9 +123,9 @@
 	<h2 style="margin-left: 10%;">Charging Station AUTO (the thing the robots go on top at the end)</h2>
 	<br>
 	<div style="margin-left: 10%;">
-		<button type="submit" onclick="toggle_climb(this.id)" id="docked-auto" class="btn btn-primary">Docked</button> <a>(robot on platform)</a>	<br>
+		<button type="submit" onclick="toggle_dock_auto(this.id)" id="docked-auto" class="btn btn-primary">Docked</button> <a>(robot on platform)</a>	<br>
 		<br>
-		<button type="submit" onclick="toggle_climb(this.id)" id="engaged-auto" class="btn btn-primary">Engaged</button> <a>(platform is balanced)</a>
+		<button type="submit" onclick="toggle_engage_auto(this.id)" id="engaged-auto" class="btn btn-primary">Engaged</button> <a>(platform is balanced)</a>
 	</div>
 	<br>
 	<h2 style="margin-left: 10%;">Teleop</h2>
@@ -237,9 +237,9 @@
 	<h2 style="margin-left: 10%;">Charging Station (the thing the robots go on top at the end)</h2>
 	<br>
 	<div style="margin-left: 10%;">
-		<button type="submit" onclick="toggle_climb(this.id)" id="docked" class="btn btn-primary">Docked</button> <a>(robot on platform)</a>	<br>
+		<button type="submit" onclick="toggle_dock(this.id)" id="docked" class="btn btn-primary">Docked</button> <a>(robot on platform)</a>	<br>
 		<br>
-		<button type="submit" onclick="toggle_climb(this.id)" id="engaged" class="btn btn-primary">Engaged</button> <a>(platform is balanced)</a>
+		<button type="submit" onclick="toggle_engage(this.id)" id="engaged" class="btn btn-primary">Engaged</button> <a>(platform is balanced)</a>
 	</div>
 	<br>
 	<h2 style="margin-left: 10%;">Robot Didnt Move</h2>
@@ -306,21 +306,56 @@
 		}
 	}
 	
-	function toggle_climb(id){	
-		const id_length = id.length;
-		if (id_length > 7 && id_length.includes("dock")){
-			docked_auto = !(docked_auto);
-		}
-		else if (id length > 7 && id_length.includes("engag")){
-			engaged_auto = !(engaged_auto);
-		)}
+	function toggle_dock(id){	
+		docked = !(docked);
 
-		if (!(id_length > 7) && id_length.includes("dock")){
-			docked = !(docked);
+		const elem = document.getElementById(id);
+		const class_t = elem.className;
+
+		console.log(class_t);
+		
+		if (class_t == 'btn btn-primary'){
+			elem.className = 'btn btn-secondary';
 		}
-		else if (!(id_length > 7) && id_length.includes("engag")){
-			engaged = !(engaged);
+		if (class_t == 'btn btn-secondary'){
+			elem.className = 'btn btn-primary';
 		}
+	}
+
+	function toggle_dock_auto(id){	
+		docked_auto = !(docked_auto);
+
+		const elem = document.getElementById(id);
+		const class_t = elem.className;
+
+		console.log(class_t);
+		
+		if (class_t == 'btn btn-primary'){
+			elem.className = 'btn btn-secondary';
+		}
+		if (class_t == 'btn btn-secondary'){
+			elem.className = 'btn btn-primary';
+		}
+	}
+	
+	function toggle_engage(id){	
+		engaged = !(engaged);
+
+		const elem = document.getElementById(id);
+		const class_t = elem.className;
+
+		console.log(class_t);
+		
+		if (class_t == 'btn btn-primary'){
+			elem.className = 'btn btn-secondary';
+		}
+		if (class_t == 'btn btn-secondary'){
+			elem.className = 'btn btn-primary';
+		}
+	}
+	
+	function toggle_engage_auto(id){	
+		engaged_auto = !(engaged_auto);
 
 		const elem = document.getElementById(id);
 		const class_t = elem.className;
