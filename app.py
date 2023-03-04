@@ -295,7 +295,7 @@ def observation():
 	context = {
 		'team_name': name
 	}
-
+	
 	if request.method == 'POST':
 		for key, val in request.form.items():
 			if key == "notes":
@@ -413,9 +413,9 @@ def observation():
 		df.to_csv(f'./observations/{now_time}.csv')
 		print('done')
 
-		return redirect('home.html')
-
-	return render_template('observing.html', **context) 
+		return redirect(url_for('home'))
+	elif request.method == 'GET':
+		return render_template('observing.html', **context) 
 
 if __name__ == '__main__':
 	app.run(debug=True)
