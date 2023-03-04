@@ -314,6 +314,9 @@ def observation():
 			'high_col': request.json['high_col'],
 			'mid_col': request.json['mid_col'],
 			'low_col': request.json['low_col'],
+			'high_col_auto': request.json['high_col_auto'],
+			'mid_col_auto': request.json['mid_col_auto'],
+			'low_col_auto': request.json['low_col_auto'],
 			'high_pts': request.json['high_pts'],
 			'mid_pts': request.json['mid_pts'],
 			'low_pts': request.json['low_pts'],
@@ -328,6 +331,9 @@ def observation():
 			'high_pts': request.json['high_pts'],
 			'mid_pts': request.json['mid_pts'],
 			'low_pts': request.json['low_pts'],
+			'high_pts_auto': request.json['high_pts_auto'],
+			'mid_pts_auto': request.json['mid_pts_auto'],
+			'low_pts_auto': request.json['low_pts_auto'],
 			'climb': request.json['climb'],
 			'match_number': request.json['match_number'],
 			'notes': request.json['notes']
@@ -358,14 +364,23 @@ def observation():
 		high_link_pts = get_link_pts(data['high_col'])
 		mid_link_pts = get_link_pts(data['mid_col'])
 		low_link_pts = get_link_pts(data['low_col'])
+		high_link_auto_pts = get_link_pts(data['high_col_auto'])
+		mid_link_auto_pts = get_link_pts(data['mid_col_auto'])
+		low_link_auto_pts = get_link_pts(data['low_col_auto'])
 
 		data['high_link_pts'] = high_link_pts
 		data['mid_link_pts'] = mid_link_pts
 		data['low_link_pts'] = low_link_pts
+		data['high_link_auto_pts'] = high_link_auto_pts
+		data['mid_link__auto_pts'] = mid_link_auto_pts
+		data['low_link_auto_pts'] = low_link_auto_pts
 		
 		csv_data['high_link_pts'] = high_link_pts
 		csv_data['mid_link_pts'] = mid_link_pts
 		csv_data['low_link_pts'] = low_link_pts
+		csv_data['high_link_auto_pts'] = high_link_auto_pts
+		csv_data['mid_link_auto_pts'] = mid_link_auto_pts
+		csv_data['low_link_auto_pts'] = low_link_auto_pts
 
 		print(request.json)
 
