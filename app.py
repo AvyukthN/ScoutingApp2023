@@ -362,6 +362,10 @@ def observation():
 		print("HIGHIWEPOIWJEPFOIWEJF")
 		print(high_pts)
 
+		total_norm_pts = high_pts + high_auto_pts + mid_pts + mid_auto_pts + low_pts + low_auto_pts 
+		total_link_pts = high_link_pts + high_link_auto_pts + mid_link_pts + mid_link_auto_pts + low_link_pts + low_link_auto_pts
+		total_pts = total_norm_pts + total_link_pts
+
 		csv_data = {
 			'time': now_time,
 			'team_name': name,
@@ -377,6 +381,7 @@ def observation():
 			'high_link_pts_auto': high_link_auto_pts,
 			'mid_link_pts_auto': mid_link_auto_pts,
 			'low_link_pts_auto': low_link_auto_pts,
+			'total_pts': total_pts,
 			'engaged': request.json['engaged'],
 			'engaged_auto': request.json['engaged_auto'],
 			'docked': request.json['docked'],
