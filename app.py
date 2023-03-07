@@ -322,6 +322,14 @@ def observation():
 			'notes': request.json['notes']
 		}
 
+		if request.json['side'] == "right":
+			temp_h_col = data['high_col']
+			temp_l_col = data['low_col']
+
+			data['low_col'] = temp_h_col
+			data['high_col'] = temp_l_col
+
+
 
 		def sum_arr(arr: list) -> int:
 			total = 0
