@@ -397,6 +397,8 @@ def observation():
 			'match_number': request.json['match_number'],	
 			'defense_bot': request.json['defense_bot'],
 			'no_move': request.json['no_move'],
+			'park': request.json['park'],
+			'mobility': request.json['mobility'],
 			'notes': request.json['notes']
 		}
 

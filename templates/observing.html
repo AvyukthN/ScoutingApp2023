@@ -249,11 +249,18 @@
 		<button type="submit" onclick="toggle_engage(this.id)" id="engaged" class="btn btn-primary">Engaged</button> <a>(platform is balanced)</a>
 	</div>
 	<br>
+	<br>
 	<h2 style="margin-left: 10%;">Robot Didnt Move</h2>
 	<button style = "margin-left: 10%" type="submit" onclick="robot_move(this.id)" id="didnt_move" class="btn btn-primary">Didnt Move</button> <a>(robot on platform)</a>	<br>
 	<br>
-	<h2 style="margin-left: 10%;">Defense Robot</h2>
-	<button style = "margin-left: 10%" type="submit" onclick="defense_bot(this.id)" id="defense_bot" class="btn btn-primary">Defense Bot</button> <a>(robot on platform)</a>	<br>
+	<br>
+	<h2 style="margin-left: 10%;">Mobility Point (robot crossed line in auto)</h2>
+	<button style = "margin-left: 10%" type="submit" onclick="toggle_mobility(this.id)" id="mobility" class="btn btn-primary">Mobility</button> <a>(robot on platform)</a>	<br>
+	<br>
+	<br>
+	<h2 style="margin-left: 10%;">Park Point (robot finished in community after teleop)</h2>
+	<button style = "margin-left: 10%" type="submit" onclick="toggle_park(this.id)" id="defense_bot" class="btn btn-primary">Park</button> <a>(robot on platform)</a>	<br>
+	<br>
 	<br>
     <h2 style="margin-left: 10%; margin-top: 3%;">Notes</h2>
 	<br>
@@ -265,6 +272,7 @@
         <!-- <button onclick = "submit()" type="submit" class="btn btn-primary mb-3" name="notes" value="notes">Save Session Notes</button> -->
     </form>
     <br>
+	<br>
     <br>
     <br>
     <br>
@@ -281,6 +289,36 @@
 	var defensive = false;
 	var no_move = false;
 	var side = "left";
+	var mobility = false;
+	var park = false;
+
+	function toggle_mobility(id){
+		mobility = !(mobility);
+
+		const elem = document.getElementById(id);
+		const class_t = elem.className;
+
+		if (class_t == 'btn btn-primary'){
+			elem.className = 'btn btn-secondary';
+		}
+		if (class_t == 'btn btn-secondary'){
+			elem.className = 'btn btn-primary';
+		}
+	}
+
+	function toggle_park(id){
+		park = !(park);
+
+		const elem = document.getElementById(id);
+		const class_t = elem.className;
+
+		if (class_t == 'btn btn-primary'){
+			elem.className = 'btn btn-secondary';
+		}
+		if (class_t == 'btn btn-secondary'){
+			elem.className = 'btn btn-primary';
+		}
+	}
 
 	function toggle_side(id){
 		if (id == "left_side"){
@@ -526,7 +564,9 @@
 			"engaged_auto": engaged_auto,
 			"defense_bot": defensive,
 			"no_move": no_move,
-			"side": side
+			"side": side,
+			"park": park,
+			"mobility": mobility
 		};
 
 		console.log(team_data);
