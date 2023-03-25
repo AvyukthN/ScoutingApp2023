@@ -59,64 +59,101 @@ def analytics_display(mode, for_search=False):
 		# sheet = init_sheet(2)
 	
 	# data = pd.read_csv('./observations/converted.csv')
-	data = pd.read_csv('./observations/converted.csv')
+	data = pd.read_csv('./compilation_saturday.csv')
 
 	# data = sheet.get_all_records()
 
 	graph_data = {}
 	radar_data = {}
-	high_goals = {}
-	low_goals = {}
-	climb_hash = {}
+	high_pts = {}
+	mid_pts = {}
+	low_pts = {}
+	dock_hash = {}
+	engage_hash = {}
+	cone_pts = {}
+	cube_pts = {}
+
 	name_set = set([])
 
 	for index, row in data.iterrows():
+		# print(row)
 		team_name = row['team_name'] 
 		if team_name not in name_set:
 			name_set.add(team_name)
 			graph_data.update({team_name: []})
 			radar_data.update({team_name: []})
-			high_goals.update({team_name: []})
-			low_goals.update({team_name: []})
-			climb_hash.update({team_name: []})
+			high_pts.update({team_name: []})
+			mid_pts.update({team_name: []})
+			low_pts.update({team_name: []})
+			dock_hash.update({team_name: []})
+			engage_hash.update({team_name: []})
+			cone_pts.update({team_name: []})
+			cube_pts.update({team_name: []})
 		
 		if mode == 'teleop':
-			high_goal = int(row['high_goal'])
-			low_goal = int(row['low_goal'])
-			climb = int(row['climb']) if mode == 'teleop' else 0
+			high_pt = int(row['teleopHighCone']) + int(row['teleopHighCube'])
+			mid_pt = int(row['teleopMidCone']) + int(row['teleopMidCube'])
+			low_pt = int(row['teleopLowCone']) + int(row['teleopLowCube'])
+			cone_pt = int(row['teleopHighCone']) + int(row['teleopMidCone'])
+			cube_pt = int(row['teleopHighCube']) + int(row['teleopMidCube'])
+			dock_pt = int(row[f'{mode}Dock']) if mode == 'teleop' else 0
+			engage_pt = int(row[f'{mode}Engage']) if mode == 'teleop' else 0
 			
-			total_score = high_goal + low_goal + climb
+			total_score = high_pt + mid_pt + low_pt 
 			
 			graph_data[team_name].append(total_score)
-			high_goals[team_name].append(high_goal)
-			low_goals[team_name].append(low_goal)
-			climb_hash[team_name].append(climb)
+			high_pts[team_name].append(high_pt)
+			mid_pts[team_name].append(mid_pt)
+			low_pts[team_name].append(low_pt)
+			dock_hash[team_name].append(dock_pt)
+			engage_hash[team_name].append(engage_pt)
+			cone_pts[team_name].append(cone_pt)
+			cube_pts[team_name].append(cube_pt)
 
 			if len(radar_data[team_name]) > 0:
-				radar_data[team_name][0][0] += high_goal
-				radar_data[team_name][0][1] += low_goal 
-				radar_data[team_name][0][2] += climb
+				radar_data[team_name][0][0] += high_pt
+				radar_data[team_name][0][1] += mid_pt
+				radar_data[team_name][0][2] += low_pt
+				radar_data[team_name][0][3] += dock_pt
+				radar_data[team_name][0][4] += engage_pt
 			else:
-				radar_data[team_name].append([high_goal, low_goal, climb])
+				radar_data[team_name].append([high_pt, mid_pt, low_pt, dock_pt, engage_pt])
 		
 		if mode == 'autonomous':
-			high_goal = int(row['auto_high'])
-			low_goal = int(row['auto_low'])
-			climb = int(row['climb']) if mode == 'teleop' else 0
+			high_pt = int(row['autoHighCone']) + int(row['autoHighCube'])
+			mid_pt = int(row['autoMidCone']) + int(row['autoMidCube'])
+			low_pt = int(row['autoLowCone']) + int(row['autoLowCube'])
+			cone_pt = int(row['teleopHighCone']) + int(row['teleopMidCone'])
+			cube_pt = int(row['teleopHighCube']) + int(row['teleopMidCube'])
+			dock_pt = int(row[f'{mode[:4]}Dock']) if mode == 'autonomous' else 0
+			engage_pt = int(row[f'{mode[:4]}Engage']) if mode == 'autonomous' else 0
 
-			total_score = high_goal + low_goal + climb
+			total_score = high_pt + mid_pt + low_pt 
 			
 			graph_data[team_name].append(total_score)
-			high_goals[team_name].append(high_goal)
-			low_goals[team_name].append(low_goal)
-			climb_hash[team_name].append(climb)
+			high_pts[team_name].append(high_pt)
+			mid_pts[team_name].append(mid_pt)
+			low_pts[team_name].append(low_pt)
+			dock_hash[team_name].append(dock_pt)
+			engage_hash[team_name].append(engage_pt)
+			cone_pts[team_name].append(cone_pt)
+			cube_pts[team_name].append(cube_pt)
 			
 			if len(radar_data[team_name]) > 0:
-				radar_data[team_name][0][0] += high_goal
-				radar_data[team_name][0][1] += low_goal 
-				radar_data[team_name][0][2] += climb
+				radar_data[team_name][0][0] += high_pt
+				radar_data[team_name][0][1] += mid_pt
+				radar_data[team_name][0][2] += low_pt
+				radar_data[team_name][0][3] += dock_pt
+				radar_data[team_name][0][4] += engage_pt
 			else:
-				radar_data[team_name].append([high_goal, low_goal, climb])
+				radar_data[team_name].append([high_pt, mid_pt, low_pt, dock_pt, engage_pt])
+			
+			# if len(radar_data[team_name]) > 0:
+			# 	radar_data[team_name][0][0] += high_goal
+			# 	radar_data[team_name][0][1] += low_goal 
+			# 	radar_data[team_name][0][2] += climb
+			# else:
+			# 	radar_data[team_name].append([high_goal, low_goal, climb])
 			
 	
 	listify = lambda l: [[str(key), l[key]] for key in l]
@@ -130,54 +167,84 @@ def analytics_display(mode, for_search=False):
 	
 	final_data = listify(graph_data)
 	final_radar_data = listify(radar_data)
-	high_goals_data = listify(high_goals)
-	low_goals_data = listify(low_goals)
-	climb_data = listify(climb_hash)
-	high_avg_data = avg_listify(high_goals_data)
-	low_avg_data = avg_listify(low_goals_data)
-	climb_avg_data = avg_listify(climb_data)
+	high_pts_data = listify(high_pts)
+	mid_pts_data = listify(mid_pts)
+	low_pts_data = listify(low_pts)
+	cone_pts_data = listify(cone_pts)
+	cube_pts_data = listify(cube_pts)
+	# climb_data = listify(climb_hash)
+	high_avg_data = avg_listify(high_pts_data)
+	mid_avg_data = avg_listify(mid_pts_data)
+	low_avg_data = avg_listify(low_pts_data)
+	cone_avg_data = avg_listify(cone_pts_data)
+	cube_avg_data = avg_listify(cube_pts_data)
+	# climb_avg_data = avg_listify(climb_data)
 	med_data = med_listify(graph_data_arr)
 	sum_data = sum_listify(graph_data_arr)
+	dock_data = listify(dock_hash)
+	engage_data = listify(engage_hash)
+
+	for i in range(len(dock_data)):
+		arr = dock_data[i][1]
+		dock_data[i][1] = np.sum(np.array(arr))
+	
+	for i in range(len(engage_data)):
+		arr = engage_data[i][1]
+		engage_data[i][1] = np.sum(np.array(arr))
+
+	print(dock_data)
+	print(engage_data)
 
 	sd_high = {}
+	sd_mid = {}
 	sd_low = {}
 	sd_climb = {}
 
-	for team in high_goals_data:
+	for team in high_pts_data:
 		vals = np.array(team[1])
 
 		sd_high.update({team[0]: np.std(vals)})
-	for team in low_goals_data:
+	for team in mid_pts_data:
+		vals = np.array(team[1])
+
+		sd_mid.update({team[0]: np.std(vals)})
+	for team in low_pts_data:
 		vals = np.array(team[1])
 
 		sd_low.update({team[0]: np.std(vals)})
-	for team in climb_data:
-		vals = np.array(team[1])
+	# for team in climb_data:
+	# 	vals = np.array(team[1])
 
-		sd_climb.update({team[0]: np.std(vals)})
+	# 	sd_climb.update({team[0]: np.std(vals)})
 
 	sd_high_arr = listify(sd_high)
+	sd_mid_arr = listify(sd_mid)
 	sd_low_arr = listify(sd_low)
 	sd_climb_arr = listify(sd_climb)
 
 	if for_search:
-		return len(final_data),final_data,final_radar_data,high_goals_data,low_goals_data,climb_data,sd_high_arr,sd_low_arr,sd_climb_arr,high_avg_data,low_avg_data,climb_avg_data,med_data,sum_data
+		return len(final_data),final_data,final_radar_data,high_pts_data,mid_pts_data,low_pts_data,climb_data,sd_high_arr,sd_low_arr,sd_climb_arr,high_avg_data,mid_avg_data,low_avg_data,climb_avg_data,med_data,sum_data
 	else:
 		return render_template('analytics_display.html', 
 					len=len(final_data), 
 					final_data=final_data, 
 					radar_data=final_radar_data, 
-					high_goals_data=high_goals_data, 
-					low_goals_data=low_goals_data,
-					climb_data=climb_data,
+					high_goals_data=high_pts_data, 
+					mid_pts_data=mid_pts_data,
+					low_goals_data=low_pts_data,
 					sd_high=sd_high_arr,
+					sd_mid=sd_mid_arr,
 					sd_low=sd_low_arr,
 					sd_climb=sd_climb_arr,
 					high_avg_data=high_avg_data,
+					mid_avg_data=mid_avg_data,
 					low_avg_data=low_avg_data,
-					climb_avg_data=climb_avg_data,
 					med_data=med_data,
 					sum_data=sum_data,
+					dock_data=dock_data,
+					engage_data=engage_data,
+					cone_avg_data=cone_avg_data,
+					cube_avg_data=cube_avg_data
 					)
 
 @app.route('/analytics_teleop', methods=['GET', 'POST'])
@@ -192,6 +259,8 @@ def analytics_display_auto():
 def analytics_search():
 	data = analytics_display('teleop', True)
 	auto_data = analytics_display('autonomous', True)
+
+	print(data)
 
 	final_data = data[1]
 	high_goals_data = data[3]

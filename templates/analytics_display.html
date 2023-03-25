@@ -7,7 +7,7 @@
     <hr>
     <br>
     <br>
-    <!-- div for all charts and graphs and whatnot -->
+    <!-- div for all charts and graphs and whatnot avy lowk cute-->
     <div>
         <h2>Leaderboard</h2>
         <br>
@@ -17,12 +17,16 @@
                 <thead>
                     <tr>
                     <th scope="col">Team</th>
-                    <th onclick="sortColumn('avg_high'); changeColRank(this);" scope="col">Average High Points</th>
-                    <th onclick="sortColumn('sd_high'); changeColRank(this);" scope="col">σ High Goal</th>
-                    <th onclick="sortColumn('avg_low'); changeColRank(this);" scope="col">Average Low Points</th>
-                    <th onclick="sortColumn('sd_low'); changeColRank(this);" scope="col">σ Low Goal</th>
-                    <th onclick="sortColumn('avg_climb'); changeColRank(this);" scope="col">Average Climb Points</th>
-                    <th onclick="sortColumn('sd_climb'); changeColRank(this);" scope="col">σ Climb</th>
+                    <th onclick="sortColumn('avg_high'); changeColRank(this);" scope="col">Average High Column</th>
+                    <th onclick="sortColumn('sd_high'); changeColRank(this);" scope="col">σ High Column</th>
+                    <th onclick="sortColumn('avg_mid'); changeColRank(this);" scope="col">Average Mid Column</th>
+                    <th onclick="sortColumn('sd_mid'); changeColRank(this);" scope="col">σ Mid Column</th>
+                    <th onclick="sortColumn('avg_low'); changeColRank(this);" scope="col">Average Low Column</th>
+                    <th onclick="sortColumn('sd_low'); changeColRank(this);" scope="col">σ Low Column</th>
+                    <th onclick="sortColumn('avg_cone'); changeColRank(this);" scope="col">Average Cone Pts</th>
+                    <th onclick="sortColumn('avg_cube'); changeColRank(this);" scope="col">Average Cube Pts</th>
+                    <th onclick="sortColumn('dock_pts'); changeColRank(this);" scope="col">Dock Pts</th>
+                    <th onclick="sortColumn('engage_pts'); changeColRank(this);" scope="col">Engage Pts</th>
                     <th onclick="sortColumn('med'); changeColRank(this)" scope="col">Median Points</th>
                     <th onclick="sortColumn('sum'); changeColRank(this)" scope="col">TOTAL</th>
                     </tr>
@@ -35,23 +39,36 @@
             let teamData = [];
 
             var sd_highs = {{ sd_high | safe }};
+            var sd_mids = {{ sd_mid | safe }};
             var sd_lows = {{ sd_low | safe }};
-            var sd_climbs = {{ sd_climb | safe }};
             var avg_highs = {{ high_avg_data | safe }};
+            var avg_mids = {{ mid_avg_data | safe }};
             var avg_lows = {{ low_avg_data | safe }};
-            var avg_climbs = {{ climb_avg_data | safe }};
+            var avg_cones = {{ cone_avg_data | safe }};
+            var avg_cubes = {{ cube_avg_data | safe }};
             var medians = {{ med_data | safe }};
             var sums = {{ sum_data | safe }};
+
+            var dock_data = {{ dock_data | safe }};
+            var engage_data = {{ engage_data | safe }};
+
+            console.log(avg_lows);
+            console.log(dock_data);
+            console.log(engage_data);
 
             for (let i = 0; i < sd_highs.length; i++){
                 teamData.push({
                     name: sd_highs[i][0],
                     sd_high: sd_highs[i][1],
+                    sd_mid: sd_mids[i][1],
                     sd_low: sd_lows[i][1],
-                    sd_climb: sd_climbs[i][1],
                     avg_high: avg_highs[i][1],
+                    avg_mid: avg_mids[i][1],
                     avg_low: avg_lows[i][1],
-                    avg_climb: avg_climbs[i][1],
+                    avg_cone: avg_cones[i][1],
+                    avg_cube: avg_cubes[i][1],
+                    dock_pts: dock_data[i][1],
+                    engage_pts: engage_data[i][1],
                     med: medians[i][1],
                     sum: sums[i][1]
                 });
@@ -69,10 +86,14 @@
                         <th scope="row">${data.name}</th>
                         <th scope="row">${data.avg_high.toPrecision(3)}</th>
                         <th scope="row">${data.sd_high.toPrecision(3)}</th>
+                        <th scope="row">${data.avg_mid.toPrecision(3)}</th>
+                        <th scope="row">${data.sd_mid.toPrecision(3)}</th>
                         <th scope="row">${data.avg_low.toPrecision(3)}</th>
                         <th scope="row">${data.sd_low.toPrecision(3)}</th>
-                        <th scope="row">${data.avg_climb.toPrecision(3)}</th>
-                        <th scope="row">${data.sd_climb.toPrecision(3)}</th>
+                        <th scope="row">${data.avg_cone.toPrecision(3)}</th>
+                        <th scope="row">${data.avg_cube.toPrecision(3)}</th>
+                        <th scope="row">${data.dock_pts.toPrecision(3)}</th>
+                        <th scope="row">${data.engage_pts.toPrecision(3)}</th>
                         <th scope="row">${data.med.toPrecision(3)}</th>
                         <th scope="row">${data.sum}</th>
                         </tr>`;
@@ -170,6 +191,8 @@
                         <th scope="col">Rows</th>
                         <th scope="col">Average Points</th>
                         <th scope="col">Median Points</th>
+                        <th scope="col">Dock Points</th>
+                        <th scope="col">Engage Points</th>
                         <th scope="col">TOTAL</th>
                         </tr>
                     </thead>
@@ -178,6 +201,8 @@
                             <th scope="row">1</th>
                             <td id = "avg_points{{ final_data[i][0] }}"></td>
                             <td id = "med_points{{ final_data[i][0] }}"></td>
+                            <td id = "dock_pts{{ final_data[i][0] }}"></td>
+                            <td id = "engage_pts{{ final_data[i][0] }}"></td>
                             <td id = "total_points{{ final_data[i][0] }}"></td>
                         </tr>
                     </tbody>
@@ -190,17 +215,17 @@
                     <thead>
                         <tr>
                         <th scope="col">Rows</th>
-                        <th scope="col">σ High Goals</th>
-                        <th scope="col">σ Low Goals</th>
-                        <th scope="col">σ Climb</th>
+                        <th scope="col">σ High Col Pts</th>
+                        <th scope="col">σ Mid Col Pts</th>
+                        <th scope="col">σ Low Col Pts</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th scope="row">1</th>
                             <td id = "sd_high{{ final_data[i][0] }}"></td>
+                            <td id = "sd_mid{{ final_data[i][0] }}"></td>
                             <td id = "sd_low{{ final_data[i][0] }}"></td>
-                            <td id = "sd_climb{{ final_data[i][0] }}"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -215,13 +240,16 @@
 
                     var sd_highs = {{ sd_high[i] | safe }};
                     var sd_lows = {{ sd_low[i] | safe }};
-                    var sd_climbs = {{ sd_climb[i] | safe }};
                     var meds = {{ med_data[i] | safe }};
                     var sums = {{ sum_data[i] | safe }};
+                    let dock = {{ dock_data[i] | safe }};
+                    let engage = {{ engage_data[i] | safe }};
+
+                    const dock_pts = dock.toString().split(",")[1];
+                    const engage_pts = engage.toString().split(",")[1];
 
                     var sd_high = sd_highs[1];
                     var sd_low = sd_lows[1];
-                    var sd_climb = sd_climbs[1];
                     var med = meds[1];
                     var sum = sums[1];
 
@@ -243,11 +271,13 @@
 
                     document.getElementById("avg_points" + name).innerText = (total/data.length).toPrecision(3); 
                     document.getElementById("med_points" + name).innerText = med.toPrecision(3);
+                    document.getElementById("dock_pts" + name).innerText = dock_pts;
+                    document.getElementById("engage_pts" + name).innerText = engage_pts;
                     document.getElementById("total_points" + name).innerText = sum; 
 
                     document.getElementById("sd_high" + name).innerText = sd_high.toPrecision(3); 
+                    document.getElementById("sd_mid" + name).innerText = sd_high.toPrecision(3); 
                     document.getElementById("sd_low" + name).innerText = sd_low.toPrecision(3); 
-                    document.getElementById("sd_climb" + name).innerText = sd_climb.toPrecision(3); 
                 }
                 update();
             </script>
@@ -257,14 +287,14 @@
             <script>
                 var vals = {{ final_data | safe }};
                 var highs = {{ high_goals_data | safe }};
+                var mids = {{ mid_pts_data | safe }};
                 var lows = {{ low_goals_data | safe }};
-                var climbs = {{ climb_data | safe }};
 
                 for (let i = 0; i < vals.length; i++){
                     var y = vals[i][1];
                     var high = highs[i][1];
+                    var mid = mids[i][1];
                     var low = lows[i][1];
-                    var climb = climbs[i][1];
                     var x = [];
 
                     for (let i = 0; i < y.length; i++){
@@ -286,22 +316,22 @@
                                     lineTension: 0.1
                                 },
                                 {
-                                    label: "High Goal",
+                                    label: "High Col Pts",
                                     data: high,
                                     fill: false,
                                     borderColor: "rgb(100, 0, 168)",
                                     lineTension: 0.1
                                 },
                                 {
-                                    label: "Low Goal",
-                                    data: low,
+                                    label: "Mid Col Pts",
+                                    data: mid,
                                     fill: false,
                                     borderColor: "rgb(255, 202, 0)",
                                     lineTension: 0.1
                                 },
                                 {
-                                    label: "Climb",
-                                    data: climb, 
+                                    label: "Low Col Pts",
+                                    data: low,
                                     fill: false,
                                     borderColor: "rgb(255, 150, 0)",
                                     lineTension: 0.1
